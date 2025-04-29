@@ -1,0 +1,88 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sc
+  namespace: prasad
+  labels:
+    app: sc
+
+# ---
+# apiVersion: autoscaling/v2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: sc-hpa
+#   namespace: prasad
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: sc
+#   minReplicas: 1
+#   maxReplicas: 10
+#   metrics:
+#     - type: Resource
+#       resource:
+#         name: cpu
+#         target:
+#           type: Utilization
+#           averageUtilization: 80
+# ---
+# Categories:
+# Storage:
+# - Storage classes
+# - Persistent volumes (PV)
+# - Persistent volume claims (PVC)
+# - Volume mode
+# - Access modes
+# - Reclaim policies
+# - Persistent storage configuration for applications
+#
+# Troubleshooting:
+# - Cluster and node logging
+# - Application monitoring
+# - Container stdout & stderr logs
+# - Application failure troubleshooting
+# - Cluster component failure troubleshooting
+# - Networking troubleshooting
+#
+# Workloads & Scheduling:
+# - Deployments (rolling updates and rollbacks)
+# - ConfigMaps and Secrets
+# - Application scaling
+# - Self-healing application deployments
+# - Resource limits and Pod scheduling
+# - Manifest management and templating tools
+#
+# Cluster Architecture, Installation & Configuration:
+# - Role-based access control (RBAC)
+# - Kubeadm for cluster installation
+# - Highly-available Kubernetes clusters
+# - Infrastructure provisioning for Kubernetes clusters
+# - Kubernetes cluster version upgrades
+# - etcd backup and restore
+#
+# Services & Networking:
+# - Host networking configuration
+# - Pod connectivity
+# - Service types (ClusterIP, NodePort, LoadBalancer)
+# - Ingress controllers and resources
+# - CoreDNS configuration
+# - Container network interface plugins
+
+
+
+---
+Kubernetes Architecture 10
+Kubernetes Architecture
+Master Node V/s Worker Node
+Components of Master Node 
+1. API Server 
+2. Scheduler 
+3. Controller Manager
+4. ETCD Server 
+5. Cloud Control Manager (Optional) 
+Components of Worker Node 
+1. Kubelet 
+2. Kube-Proxy 
+3. Container Runtime  

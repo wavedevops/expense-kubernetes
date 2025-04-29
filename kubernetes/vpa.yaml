@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: prasad
+  labels:
+    app: guestbook
+    tier: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+      - name: nginx
+        image: docker.io/nginx:1.24
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "50m"
+          limits:
+            memory: "150Mi"
+            cpu: "100m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: prasad
+spec:
+  selector:
+    tier: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+# Define a Vertical Pod Autoscaler (VPA) for the frontend deployment
+apiVersion: "autoscaling.k8s.io/v1"
+kind: VerticalPodAutoscaler
+metadata:
+  name: frontend-vpa
+  namespace: prasad
+spec:
+  # Reference the target deployment for scaling
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: frontend
+  # Set the update policy to automatically adjust resource requests/limits
+  updatePolicy:
+    updateMode: "Auto"
+  # Define resource policies for containers
+  resourcePolicy:
+    containerPolicies:
+      - containerName: '*' # Apply policy to all containers in the pod
+        minAllowed:
+          cpu: 100m # Minimum CPU allocation
+          memory: 50Mi # Minimum memory allocation
+        maxAllowed:
+          cpu: 1 # Maximum CPU allocation
+          memory: 500Mi # Maximum memory allocation
+        controlledResources: ["cpu", "memory"] # Resources controlled by the VPA
+---
+# Define an Ingress resource to expose the frontend service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend # Name of the Ingress resource
+  namespace: prasad # Namespace where the Ingress is created
+spec:
+  rules:
+    - host: "hari.chaitu.org" # Hostname for the Ingress
+      http:
+        paths:
+          - pathType: Prefix # Path matching type
+            path: "/" # Path to match
+            backend:
+              service:
+                name: frontend # Name of the service to route traffic to
+                port:
+                  number: 80 # Port of the service to route traffic to
